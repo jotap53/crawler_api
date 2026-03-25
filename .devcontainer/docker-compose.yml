@@ -3,11 +3,16 @@ services:
     image: mcr.microsoft.com/devcontainers/python:3-3.13-trixie
     environment:
       - PYTHONUNBUFFERED=1
-      - ANTHROPIC_BASE_URL=http://ollama:11434
+      # - ANTHROPIC_BASE_URL=http://ollama:11434
       - ANTHROPIC_API_KEY=""
       - ANTHROPIC_AUTH_TOKEN=ollama
     volumes:
       - ../..:/workspaces:cached
+
+    models:
+      qwen3:
+        endpoint_var: ANTHROPIC_BASE_URL
+        model_var: QWEN_MODEL
 
     # Overrides default command so things don't shut down after the process ends.
     command: sleep infinity
@@ -22,11 +27,16 @@ services:
       POSTGRES_DB: postgres
       POSTGRES_PASSWORD: postgres
   
-  ollama:
-    image: ollama/ollama:0.18.2
-    volumes:
-      - ollama:/root/.ollama
+  # ollama:
+  #   image: ollama/ollama:0.18.2
+  #   volumes:
+  #     - ollama:/root/.ollama
 
 volumes:
   postgres-data:
-  ollama:
+  # ollama:
+
+models:
+  qwen3:
+    model: ai/qwen3:latest
+    context_size: 1024
