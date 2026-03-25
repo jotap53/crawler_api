@@ -1,0 +1,32 @@
+services:
+  app:
+    image: mcr.microsoft.com/devcontainers/python:3-3.13-trixie
+    environment:
+      - PYTHONUNBUFFERED=1
+      - ANTHROPIC_BASE_URL=http://ollama:11434
+      - ANTHROPIC_API_KEY=""
+      - ANTHROPIC_AUTH_TOKEN=ollama
+    volumes:
+      - ../..:/workspaces:cached
+
+    # Overrides default command so things don't shut down after the process ends.
+    command: sleep infinity
+
+  db:
+    image: postgres:16-alpine
+    restart: unless-stopped
+    volumes:
+      - postgres-data:/var/lib/postgresql
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_DB: postgres
+      POSTGRES_PASSWORD: postgres
+  
+  ollama:
+    image: ollama/ollama:0.18.2
+    volumes:
+      - ollama:/root/.ollama
+
+volumes:
+  postgres-data:
+  ollama:
